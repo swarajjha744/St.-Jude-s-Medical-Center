@@ -1,0 +1,143 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Represents a patient profile or staff details mapped by their Auth UID.",
+      "type": "object",
+      "properties": {
+        "role": { "type": "string", "enum": ["patient", "doctor", "nurse", "receptionist", "admin"] },
+        "name": { "type": "string" },
+        "DOB": { "type": "string" },
+        "bloodGroup": { "type": "string" },
+        "phone": { "type": "string" },
+        "address": { "type": "string" },
+        "emergencyContact": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["role", "name"]
+    },
+    "Appointment": {
+      "title": "Appointment",
+      "description": "Represents a booking of a patient with a doctor in a department.",
+      "type": "object",
+      "properties": {
+        "patientId": { "type": "string" },
+        "doctorId": { "type": "string" },
+        "department": { "type": "string" },
+        "dateTime": { "type": "string", "format": "date-time" },
+        "status": { "type": "string", "enum": ["pending", "confirmed", "completed", "cancelled"] },
+        "notes": { "type": "string" },
+        "createdBy": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["patientId", "doctorId", "department", "dateTime", "status"]
+    },
+    "HealthRecord": {
+      "title": "HealthRecord",
+      "description": "Metadata for files uploaded by staff to Storage for a patient.",
+      "type": "object",
+      "properties": {
+        "fileName": { "type": "string" },
+        "storageUrl": { "type": "string" },
+        "uploadedBy": { "type": "string" },
+        "uploadedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["fileName", "storageUrl", "uploadedBy", "uploadedAt"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "Notification message for patients.",
+      "type": "object",
+      "properties": {
+        "message": { "type": "string" },
+        "type": { "type": "string" },
+        "read": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["message", "type", "read", "createdAt"]
+    },
+    "Doctor": {
+      "title": "Doctor",
+      "description": "Doctor profile and details.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "specialty": { "type": "string" },
+        "bio": { "type": "string" },
+        "photoUrl": { "type": "string" },
+        "departmentId": { "type": "string" }
+      },
+      "required": ["name", "specialty"]
+    },
+    "Department": {
+      "title": "Department",
+      "description": "Hospital medical department.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "icon": { "type": "string" }
+      },
+      "required": ["name"]
+    },
+    "Staff": {
+      "title": "Staff",
+      "description": "Staff profile registered by admin.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "role": { "type": "string", "enum": ["doctor", "nurse", "receptionist", "admin"] },
+        "email": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "role", "email"]
+    },
+    "ContactSubmission": {
+      "title": "ContactSubmission",
+      "description": "Form submission from the public Contact page.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "message": { "type": "string" },
+        "submittedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "email", "message", "submittedAt"]
+    }
+  },
+  "firestore": {
+    "users/{uid}": {
+      "schema": "User",
+      "description": "Users stored at their authentication UID."
+    },
+    "appointments/{id}": {
+      "schema": "Appointment",
+      "description": "Appointments mapped by document ID."
+    },
+    "records/{patientUid}/files/{fileId}": {
+      "schema": "HealthRecord",
+      "description": "Files uploaded for a specific patient."
+    },
+    "notifications/{uid}/items/{id}": {
+      "schema": "Notification",
+      "description": "Notifications for a specific patient user."
+    },
+    "doctors/{id}": {
+      "schema": "Doctor",
+      "description": "Doctor details and specialties."
+    },
+    "departments/{id}": {
+      "schema": "Department",
+      "description": "Departments of the hospital."
+    },
+    "staff/{uid}": {
+      "schema": "Staff",
+      "description": "All authorized hospital staff."
+    },
+    "contactSubmissions/{id}": {
+      "schema": "ContactSubmission",
+      "description": "Raw submissions from public contact forms."
+    }
+  }
+}

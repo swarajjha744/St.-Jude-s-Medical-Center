@@ -1,0 +1,6 @@
+{
+  "name": "Hospital Website & Portal",
+  "description": "Full-stack hospital website with a patient-facing portal and separate secure staff admin portal powered by Supabase.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

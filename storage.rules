@@ -1,0 +1,31 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Check if user is signed in
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    // Check if user is staff using custom claims set by admin portal
+    function isStaff() {
+      return isSignedIn() && (
+        request.auth.token.role == 'doctor' || 
+        request.auth.token.role == 'nurse' || 
+        request.auth.token.role == 'receptionist' || 
+        request.auth.token.role == 'admin'
+      );
+    }
+    
+    // Match patient records path
+    match /records/{patientUid}/{allPaths=**} {
+      allow read: if isSignedIn() && (request.auth.uid == patientUid || isStaff());
+      allow write: if isSignedIn() && isStaff();
+    }
+
+    // Default deny on all other paths
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}
